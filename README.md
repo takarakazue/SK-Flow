@@ -207,6 +207,12 @@ stateDiagram-v2
 
 ## 10. Prints
 
+### Login
+
+| Computador | Celular |
+|---|---|
+| ![Login no computador](docs/prints/pc-00-login.png) | <img src="docs/prints/mobile-00-login.png" width="260" alt="Login no celular"> |
+
 ### Computador
 
 | Dashboard | Atrasadas agora |
@@ -243,7 +249,14 @@ stateDiagram-v2
 
 **Vídeo pitch:** _[inserir link do YouTube/Loom/Drive]_
 
-1. **Acesso** — entre com o usuário de teste fornecido pelo autor. O usuário precisa ter o papel **SKFlow** (Portal ODC → Users → End-user access).
+1. **Acesso** — na tela de login, use os campos **E-mail** e **Senha** (não o botão "Entrar com conta OutSystems"):
+
+   | Usuário de teste (tutor) | |
+   |---|---|
+   | **E-mail** | `eugenia.stefens.237219+skflow@a.fecaf.com.br` |
+   | **Senha** | `Tutor123123123` |
+
+   > Conta exclusiva para avaliação, com acesso apenas ao app SK Flow (papel **SKFlow**) e somente a dados fictícios.
 2. **Dados de demonstração** — se o Dashboard estiver vazio, clique em **"Carregar dados de demonstração"** (4 empresas, 9 trabalhadores e 12 ocorrências fictícias).
 3. **Dashboard** — confira os indicadores, os gráficos e a lista de atrasadas.
 4. **Nova ocorrência com IA** — escolha um trabalhador, um canal e cole uma das mensagens abaixo. Clique em **"Registrar e analisar com IA"**.
