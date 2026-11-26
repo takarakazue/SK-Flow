@@ -240,91 +240,91 @@ stateDiagram-v2
 
 | Dashboard | Gráficos | Atrasadas |
 |---|---|---|
-| <img src="docs/prints/mobile-01-dashboard.png" width="220"> | <img src="docs/prints/mobile-02-graficos.png" width="220"> | <img src="docs/prints/mobile-03-atrasadas.png" width="220"> |
+| <img src="docs/prints/mobile-01-dashboard.png" width="220" alt="Dashboard no celular"> | <img src="docs/prints/mobile-02-graficos.png" width="220" alt="Gráficos no celular"> | <img src="docs/prints/mobile-03-atrasadas.png" width="220" alt="Atrasadas no celular"> |
 
 | Lista | Kanban | Mover para… |
 |---|---|---|
-| <img src="docs/prints/mobile-04-lista.png" width="220"> | <img src="docs/prints/mobile-05-kanban.png" width="220"> | <img src="docs/prints/mobile-06-mover-para.png" width="220"> |
+| <img src="docs/prints/mobile-04-lista.png" width="220" alt="Lista de ocorrências no celular"> | <img src="docs/prints/mobile-05-kanban.png" width="220" alt="Kanban no celular"> | <img src="docs/prints/mobile-06-mover-para.png" width="220" alt="Menu Mover para no celular"> |
 
 | Nova ocorrência (espanhol) | Detalhe | Resposta sugerida |
 |---|---|---|
-| <img src="docs/prints/mobile-07-nova-ocorrencia.png" width="220"> | <img src="docs/prints/mobile-08-detalhe.png" width="220"> | <img src="docs/prints/mobile-09-resposta-sugerida.png" width="220"> |
+| <img src="docs/prints/mobile-07-nova-ocorrencia.png" width="220" alt="Nova ocorrência em espanhol no celular"> | <img src="docs/prints/mobile-08-detalhe.png" width="220" alt="Detalhe da ocorrência no celular"> | <img src="docs/prints/mobile-09-resposta-sugerida.png" width="220" alt="Resposta sugerida no celular"> |
 
 ## 11. Evolução do desenvolvimento
 
-O SK Flow foi desenvolvido de forma iterativa, com testes e ajustes técnicos e visuais. As capturas abaixo registram etapas de 25 e 26 de novembro de 2026, comparadas com a versão final.
+O desenvolvimento foi iterativo, com testes da aplicação publicada no ODC e ajustes sucessivos de integração, apresentação e usabilidade. As capturas de 25 e 26 de novembro de 2026 registram versões intermediárias e permitem comparar os problemas observados com a versão final.
 
-### 11.1. Integração com IA e processamento multilíngue
+### 11.1. Integração com IA e caracteres não latinos
 
-Durante os testes da integração inicial com a API da OpenAI via REST, a mensagem original em vietnamita e sua tradução para português permaneceram legíveis, mas a resposta sugerida no idioma do trabalhador apresentou corrupção de caracteres. No desktop (OC-0014), a substituição foi parcial; em outro teste no smartphone, todo o conteúdo foi substituído por pontos de interrogação. A falha comprometia a comunicação multilíngue. Mesmo após ajustes de UTF-8, a solução registrada foi migrar para o recurso nativo AI Models do OutSystems ODC, mantendo a chave de API fora do código. Os testes posteriores demonstraram respostas legíveis, inclusive em birmanês. As capturas comprovam o sintoma, mas não isolam a etapa técnica responsável pela corrupção nem indicam que o dispositivo tenha causado a falha.
+A integração com a IA passou por três etapas até os textos em idiomas não latinos aparecerem corretamente. O problema comprometia justamente a comunicação multilíngue, que é o centro da solução.
 
-**Falha parcial (desktop)**
+**Etapa 1 — chamada REST sem tratamento de codificação (25/11).** A primeira versão chamava a API da OpenAI por REST. Os acentos chegavam corrompidos ("estÃ¡" em vez de "está") e a resposta em vietnamita virava uma sequência de símbolos. Nesse teste a IA também classificou a ocorrência como "Outros", em vez de Salário/Holerite.
 
-`Xin l?i v? s? b?t ti?n này. B?n nên liên h? v?i b? ph?n nhân s? d? gi?i quy?t v?n d? này.`
+![Primeira versão: acentos corrompidos em português e resposta vietnamita ilegível (OC-0013)](docs/evolucao/unicode-00-rest-inicial.png)
 
-**Falha total (smartphone)**
+*Primeira versão: acentos corrompidos e resposta vietnamita ilegível (OC-0013, 25/11).*
 
-![Desktop: mensagem original e tradução para português preservadas.](docs/evolucao/unicode-01-desktop-analise.png)
+**Etapa 2 — ajuste de UTF-8.** Depois de decodificar a resposta como UTF-8, o português passou a aparecer corretamente, mas a resposta no idioma do trabalhador ainda perdia caracteres: no computador, parte das letras virou "?" (OC-0014); no celular, a resposta inteira.
 
-*Desktop: mensagem original e tradução para português preservadas.*
-
-![Desktop: resposta vietnamita com substituição parcial de caracteres por pontos de interrogação.](docs/evolucao/unicode-02-desktop-erro-parcial.png)
-
-*Desktop: resposta vietnamita com substituição parcial de caracteres por pontos de interrogação.*
-
-![Smartphone: mensagem original, tradução e resumo preservados.](docs/evolucao/unicode-03-mobile-analise.png)
-
-*Smartphone: mensagem original, tradução e resumo preservados.*
-
-![Smartphone: classificação e resposta sugerida em português.](docs/evolucao/unicode-04-mobile-classificacao.png)
-
-*Smartphone: classificação e resposta sugerida em português.*
-
-![Smartphone: resposta vietnamita integralmente substituída por pontos de interrogação.](docs/evolucao/unicode-05-mobile-erro-total.png)
-
-*Smartphone: resposta vietnamita integralmente substituída por pontos de interrogação.*
-
-**Validação posterior**
-
-| Entrada em birmanês | Resultado da análise | Resposta sugerida |
-|---|---|---|
-| ![Entrada](docs/prints/pc-05-nova-ocorrencia.png) | ![Análise](docs/prints/pc-06-detalhe-ia.png) | ![Resposta](docs/prints/pc-07-detalhe-responder.png) |
-
-Os prompts também foram refinados para produzir resumos em terceira pessoa e respostas na perspectiva da SK Link. A qualidade linguística requer validação por falantes nativos antes do uso real.
-
-### 11.2. Dashboard e identidade visual
-
-Os gráficos inicialmente azuis foram padronizados com o vermelho da identidade visual da SK Link, mantendo o destaque para ocorrências atrasadas.
-
-| Versão inicial | Versão final |
+| Computador: análise preservada | Computador: resposta com falha parcial |
 |---|---|
-| ![Dashboard inicial](docs/evolucao/dashboard-inicial.png) | ![Dashboard final](docs/prints/pc-01-dashboard.png) |
+| ![Computador: mensagem original e tradução para português preservadas](docs/evolucao/unicode-01-desktop-analise.png) | ![Computador: resposta vietnamita com parte dos caracteres trocada por pontos de interrogação](docs/evolucao/unicode-02-desktop-erro-parcial.png) |
 
-### 11.3. Filtros e visualização em Kanban
+Trecho da resposta corrompida: `Xin l?i v? s? b?t ti?n này. B?n nên liên h? v?i b? ph?n nhân s? d? gi?i quy?t v?n d? này.`
 
-Os filtros inicialmente exibiam o valor interno `0` em vez de um rótulo compreensível. A interface passou a apresentar Todos/Todas. O Kanban evoluiu com bandeiras, melhor alinhamento dos cartões e alternativa de movimentação pelo botão “Mover para…”.
+| Celular: análise preservada | Celular: resposta em português correta | Celular: resposta vietnamita trocada por "?" |
+|---|---|---|
+| <img src="docs/evolucao/unicode-03-mobile-analise.png" width="220" alt="Celular: mensagem original, tradução e resumo preservados"> | <img src="docs/evolucao/unicode-04-mobile-classificacao.png" width="220" alt="Celular: classificação e resposta sugerida em português"> | <img src="docs/evolucao/unicode-05-mobile-erro-total.png" width="220" alt="Celular: resposta vietnamita inteira trocada por pontos de interrogação"> |
 
-| Filtros iniciais | Filtros corrigidos |
+**Etapa 3 — migração para o conector nativo AI models.** A integração foi migrada para o recurso AI models do ODC, que resolveu a codificação e manteve a chave de API fora do código. Como Libraries não podem usar esse conector, as ações de IA passaram da Foundation para o Core. Os testes seguintes mostraram textos legíveis em todos os idiomas, inclusive birmanês.
+
+![Versão final: mensagem em birmanês, tradução, resumo e classificação corretos](docs/prints/pc-06-detalhe-ia.png)
+
+*Versão final: mensagem em birmanês, tradução, resumo e classificação corretos (26/11).*
+
+### 11.2. Filtros e organização do Kanban
+
+Em uma versão intermediária, os filtros exibiam o valor numérico `0` em vez de rótulos compreensíveis. A apresentação dos cartões também foi refinada, com bandeiras, alinhamento dos elementos e acesso à ação "Mover para…". A versão final apresenta os rótulos Todos/Todas e uma organização visual mais consistente.
+
+| Kanban intermediário (filtros com "0") | Kanban final |
 |---|---|
-| ![Filtros iniciais](docs/evolucao/filtros-iniciais.png) | ![Filtros finais](docs/prints/pc-03-ocorrencias-lista.png) |
+| ![Kanban intermediário com valores numéricos nos filtros](docs/evolucao/kanban-inicial.png) | ![Kanban após ajustes de filtros, cartões e bandeiras](docs/prints/pc-04-ocorrencias-kanban.png) |
 
-| Kanban inicial | Kanban intermediário | Kanban final |
-|---|---|---|
-| ![Kanban inicial](docs/evolucao/kanban-inicial.png) | ![Kanban intermediário](docs/evolucao/kanban-intermediario.png) | ![Kanban final](docs/prints/pc-04-ocorrencias-kanban.png) |
+### 11.3. Padronização visual e indicadores
 
-### 11.4. Autenticação
+O Dashboard passou por ajustes de cores e de apresentação dos gráficos, aproximando-se da identidade visual da SK Link. Os indicadores e a lista de atrasadas foram mantidos como elementos centrais de acompanhamento. A comparação documenta a evolução visual; a variação dos números de teste não representa ganho de desempenho real.
 
-A tela padrão do OutSystems evoluiu para uma interface personalizada em português, com identidade visual do SK Flow e opção separada de acesso administrativo pelo OutSystems.
+| Dashboard intermediário (gráficos azuis) | Dashboard final (cor institucional) |
+|---|---|
+| ![Dashboard intermediário com gráficos azuis](docs/evolucao/dashboard-inicial.png) | ![Dashboard com gráficos na cor institucional](docs/prints/pc-01-dashboard.png) |
 
-| Login padrão | Versão intermediária | Versão final |
-|---|---|---|
-| ![Login padrão](docs/evolucao/login-padrao.png) | ![Login intermediário](docs/evolucao/login-intermediario.png) | ![Login final](docs/prints/pc-00-login.png) |
+### 11.4. Autenticação e identidade visual
 
-### 11.5. Aprendizado e limitações identificadas
+A tela padrão do OutSystems foi complementada por uma tela de acesso personalizada, com a marca SK Link, rótulos em português e uma opção separada de acesso com conta OutSystems. Os ajustes finais incluíram o fundo, a integração visual do logotipo e a distribuição dos elementos.
 
-O teste de uma solicitação de acompanhamento médico para a manhã seguinte mostrou que uma prioridade Alta (24 horas úteis) pode resultar em prazo posterior à necessidade informada. O cálculo segue a regra atual, mas evidencia a necessidade de considerar também a urgência temporal explícita da mensagem. Esse refinamento permanece como melhoria futura, com revisão humana da prioridade.
+| Tela padrão do OutSystems | Primeira versão personalizada |
+|---|---|
+| ![Tela padrão de autenticação do OutSystems](docs/evolucao/login-padrao.png) | ![Primeira versão da tela personalizada](docs/evolucao/login-intermediario.png) |
 
-As iterações demonstram a importância de testar integrações, regras de negócio e usabilidade, além de construir as telas. As imagens finais para computador e celular permanecem na seção [Prints](#10-prints).
+**Versão final:**
+
+![Tela de login personalizada após refinamento visual](docs/prints/pc-00-login.png)
+
+### 11.5. Regras de negócio e detalhes corrigidos nos testes
+
+Nem todo problema aparece em uma captura de tela. Os testes com dados fictícios revelaram falhas de regra e de apresentação que foram corrigidas antes da versão final:
+
+- **Fuso horário do SLA:** o cálculo inicial usava o horário do servidor (UTC), e os prazos saíam deslocados em 9 horas. A função `CalcularPrazoUtil` passou a considerar o horário do Japão (UTC+9).
+- **Códigos de idioma:** a entidade `Idioma` usava nomes como código ("Japones", "Biromanes"), o que quebrava o mapeamento da resposta da IA. Os códigos foram padronizados para `ja`, `pt`, `vi`, `my` e `es`.
+- **Perspectiva da IA:** as primeiras respostas sugeridas falavam como se fossem o trabalhador, e o resumo vinha em 1ª pessoa. Regras explícitas no prompt corrigiram os dois casos.
+- **Gráficos do Dashboard:** os eixos mostravam valores decimais (como 0,5 ocorrência) e as dicas exibiam rótulos técnicos. Os gráficos passaram a usar apenas números inteiros.
+- **Layout no celular:** o menu sobrepunha o cabeçalho, a alternância Lista/Kanban ficava desalinhada e o cartão de login ultrapassava a tela. Todos foram ajustados na versão responsiva.
+
+### 11.6. Aprendizados e validações pendentes
+
+Os ajustes evidenciam a necessidade de testar tanto a lógica quanto a experiência de uso em aplicações low-code. O teste de uma solicitação de acompanhamento médico para a manhã seguinte mostrou que uma prioridade Alta (24 horas úteis) pode resultar em prazo posterior à necessidade informada pelo trabalhador. Uma melhoria futura é considerar prazos explícitos na triagem, com revisão humana. A integração com canais externos também permanece como etapa futura: o registro de uma resposta no sistema não comprova sua entrega por WhatsApp ou LINE.
+
+As imagens finais para computador e celular estão na seção [Prints](#10-prints).
 
 ## 12. Como testar
 
