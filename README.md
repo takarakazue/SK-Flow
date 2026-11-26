@@ -2,7 +2,13 @@
 
 > Aplicação web low-code em **OutSystems Developer Cloud (ODC)** para registrar, classificar e acompanhar ocorrências de trabalhadores estrangeiros, com **IA multilíngue**, **prazos SLA em horas úteis** e **indicadores gerenciais**.
 
-Projeto acadêmico da disciplina **Desenvolvimento de Aplicações Web Low Code** — Graduação Tecnológica em Inteligência Artificial e Automação Digital (UniFECAF).
+| Identificação | |
+|---|---|
+| **Aluna** | Eugenia Kazue Takara Stefens |
+| **RA** | 237219 |
+| **Curso** | Graduação Tecnológica em Inteligência Artificial e Automação Digital |
+| **Disciplina** | Desenvolvimento de Aplicações Web Low Code |
+| **Instituição** | UniFECAF |
 
 > ⚠️ **Ambiente acadêmico.** Todos os trabalhadores, empresas, telefones e mensagens são **fictícios**. Nenhum dado real é utilizado.
 
@@ -254,7 +260,7 @@ stateDiagram-v2
    | Usuário de teste (tutor) | |
    |---|---|
    | **E-mail** | `eugenia.stefens.237219+skflow@a.fecaf.com.br` |
-   | **Senha** | `Tutor123123123` |
+   | **Senha** | _enviada em privado ao professor_ |
 
    > Conta exclusiva para avaliação, com acesso apenas ao app SK Flow (papel **SKFlow**) e somente a dados fictícios.
 2. **Dados de demonstração** — se o Dashboard estiver vazio, clique em **"Carregar dados de demonstração"** (4 empresas, 9 trabalhadores e 12 ocorrências fictícias).
@@ -282,5 +288,5 @@ stateDiagram-v2
 
 ---
 
-**Autor:** Kazue Takara — UniFECAF, Graduação Tecnológica em Inteligência Artificial e Automação Digital
+**Autora:** Eugenia Kazue Takara Stefens (RA 237219) — UniFECAF, Graduação Tecnológica em Inteligência Artificial e Automação Digital
 **Disciplina:** Desenvolvimento de Aplicações Web Low Code
