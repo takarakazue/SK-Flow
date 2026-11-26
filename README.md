@@ -256,13 +256,41 @@ O SK Flow foi desenvolvido de forma iterativa, com testes e ajustes técnicos e 
 
 ### 11.1. Integração com IA e processamento multilíngue
 
-A integração REST inicial apresentou problemas de codificação de caracteres não latinos. A migração para o conector nativo AI models do ODC resolveu o problema relatado e permitiu manter a chave de API fora do código. Os prompts também foram refinados para produzir resumos em terceira pessoa e respostas na perspectiva da SK Link.
+Durante os testes da integração inicial com a API da OpenAI via REST, a mensagem original em vietnamita e sua tradução para português permaneceram legíveis, mas a resposta sugerida no idioma do trabalhador apresentou corrupção de caracteres. No desktop (OC-0014), a substituição foi parcial; em outro teste no smartphone, todo o conteúdo foi substituído por pontos de interrogação. A falha comprometia a comunicação multilíngue. Mesmo após ajustes de UTF-8, a solução registrada foi migrar para o recurso nativo AI Models do OutSystems ODC, mantendo a chave de API fora do código. Os testes posteriores demonstraram respostas legíveis, inclusive em birmanês. As capturas comprovam o sintoma, mas não isolam a etapa técnica responsável pela corrupção nem indicam que o dispositivo tenha causado a falha.
 
-| Entrada em birmanês | Resultado da análise |
-|---|---|
-| ![Mensagem de teste](docs/prints/pc-05-nova-ocorrencia.png) | ![Tradução e classificação](docs/prints/pc-06-detalhe-ia.png) |
+**Falha parcial (desktop)**
 
-As imagens mostram o resultado funcional após os ajustes, não a falha original de codificação. A qualidade linguística ainda requer validação por falantes nativos antes do uso real.
+`Xin l?i v? s? b?t ti?n này. B?n nên liên h? v?i b? ph?n nhân s? d? gi?i quy?t v?n d? này.`
+
+**Falha total (smartphone)**
+
+![Desktop: mensagem original e tradução para português preservadas.](docs/evolucao/unicode-01-desktop-analise.png)
+
+*Desktop: mensagem original e tradução para português preservadas.*
+
+![Desktop: resposta vietnamita com substituição parcial de caracteres por pontos de interrogação.](docs/evolucao/unicode-02-desktop-erro-parcial.png)
+
+*Desktop: resposta vietnamita com substituição parcial de caracteres por pontos de interrogação.*
+
+![Smartphone: mensagem original, tradução e resumo preservados.](docs/evolucao/unicode-03-mobile-analise.png)
+
+*Smartphone: mensagem original, tradução e resumo preservados.*
+
+![Smartphone: classificação e resposta sugerida em português.](docs/evolucao/unicode-04-mobile-classificacao.png)
+
+*Smartphone: classificação e resposta sugerida em português.*
+
+![Smartphone: resposta vietnamita integralmente substituída por pontos de interrogação.](docs/evolucao/unicode-05-mobile-erro-total.png)
+
+*Smartphone: resposta vietnamita integralmente substituída por pontos de interrogação.*
+
+**Validação posterior**
+
+| Entrada em birmanês | Resultado da análise | Resposta sugerida |
+|---|---|---|
+| ![Entrada](docs/prints/pc-05-nova-ocorrencia.png) | ![Análise](docs/prints/pc-06-detalhe-ia.png) | ![Resposta](docs/prints/pc-07-detalhe-responder.png) |
+
+Os prompts também foram refinados para produzir resumos em terceira pessoa e respostas na perspectiva da SK Link. A qualidade linguística requer validação por falantes nativos antes do uso real.
 
 ### 11.2. Dashboard e identidade visual
 
