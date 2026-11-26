@@ -29,6 +29,7 @@
 11. [Evolução do desenvolvimento](#11-evolução-do-desenvolvimento)
 12. [Como testar](#12-como-testar)
 13. [Limitações e próximos passos](#13-limitações-e-próximos-passos)
+14. [Conclusão](#14-conclusão)
 
 ---
 
@@ -148,6 +149,96 @@ erDiagram
 | `Canal` | LINE · WhatsApp · Telefone · Presencial · E-mail |
 
 Campos importantes de `Ocorrencia`: mensagem original, tradução, resumo, categoria/prioridade **sugeridas pela IA** e **finais**, `ClassificacaoConfirmada`, `ClassificacaoCorrigida`, `ClassificacaoPendente`, `DataAbertura`, `PrazoSLA`, `DataEstouroSLA`, `DataResolucao`, responsável.
+
+### Dicionário de dados das principais entidades
+
+Atributos conforme o modelo publicado no SKFlow_Core (ODC). "Obrigatório" indica a propriedade Is Mandatory da entidade; as chaves estrangeiras são atributos do tipo Identifier.
+
+**Ocorrencia** — registro central do atendimento
+
+| Atributo | Tipo de dado | Obrigatório | Chave |
+|---|---|---|---|
+| `Id` | Long Integer | Sim | PK (autonumeração) |
+| `Codigo` | Text (20) | Sim | — |
+| `TrabalhadorId` | Trabalhador Identifier | Sim | FK → Trabalhador |
+| `EmpresaClienteId` | EmpresaCliente Identifier | Não | FK → EmpresaCliente |
+| `CanalId` | Canal Identifier | Não | FK → Canal |
+| `IdiomaDetectadoId` | Idioma Identifier | Não | FK → Idioma |
+| `MensagemOriginal` | Text (2000) | Sim | — |
+| `Traducao` | Text (2000) | Não | — |
+| `Resumo` | Text (500) | Não | — |
+| `CategoriaSugeridaIAId` | Categoria Identifier | Não | FK → Categoria |
+| `PrioridadeSugeridaIAId` | Prioridade Identifier | Não | FK → Prioridade |
+| `CategoriaId` | Categoria Identifier | Não | FK → Categoria |
+| `PrioridadeId` | Prioridade Identifier | Sim | FK → Prioridade |
+| `ClassificacaoConfirmada` | Boolean | Sim | — |
+| `ClassificacaoCorrigida` | Boolean | Sim | — |
+| `ClassificacaoPendente` | Boolean | Sim | — |
+| `RespostaSugeridaOriginal` | Text (2000) | Não | — |
+| `RespostaSugeridaTraducao` | Text (2000) | Não | — |
+| `StatusId` | Status Identifier | Sim | FK → Status |
+| `ResponsavelId` | User Identifier | Não | FK → User (usuário do ODC) |
+| `DataAbertura` | Date Time | Sim | — |
+| `PrazoSLA` | Date Time | Sim | — |
+| `DataEstouroSLA` | Date Time | Não | — |
+| `DataResolucao` | Date Time | Não | — |
+
+**Trabalhador** — trabalhador estrangeiro atendido
+
+| Atributo | Tipo de dado | Obrigatório | Chave |
+|---|---|---|---|
+| `Id` | Long Integer | Sim | PK (autonumeração) |
+| `Codigo` | Text (20) | Não | — |
+| `Nome` | Text (100) | Não | — |
+| `EmpresaClienteId` | EmpresaCliente Identifier | Não | FK → EmpresaCliente |
+| `IdiomaId` | Idioma Identifier | Não | FK → Idioma |
+| `Telefone` | Text (30) | Não | — (exibido mascarado) |
+| `Ativo` | Boolean | Sim | — |
+
+**EmpresaCliente** — empresa japonesa cliente da SK Link
+
+| Atributo | Tipo de dado | Obrigatório | Chave |
+|---|---|---|---|
+| `Id` | Long Integer | Sim | PK (autonumeração) |
+| `Nome` | Text (100) | Não | — |
+| `Cidade` | Text (100) | Não | — |
+| `Ativo` | Boolean | Sim | — |
+
+**Interacao** — mensagens e respostas de cada ocorrência
+
+| Atributo | Tipo de dado | Obrigatório | Chave |
+|---|---|---|---|
+| `Id` | Long Integer | Sim | PK (autonumeração) |
+| `OcorrenciaId` | Ocorrencia Identifier | Não | FK → Ocorrencia |
+| `DataHora` | Date Time | Não | — |
+| `Autor` | Text (20) | Não | — (Trabalhador ou Atendente) |
+| `TextoOriginal` | Text (2000) | Não | — |
+| `TextoTraduzido` | Text (2000) | Não | — |
+| `UsuarioId` | User Identifier | Não | FK → User (usuário do ODC) |
+
+**HistoricoStatus** — trilha de auditoria das mudanças de status
+
+| Atributo | Tipo de dado | Obrigatório | Chave |
+|---|---|---|---|
+| `Id` | Long Integer | Sim | PK (autonumeração) |
+| `OcorrenciaId` | Ocorrencia Identifier | Não | FK → Ocorrencia |
+| `StatusAnteriorId` | Status Identifier | Não | FK → Status |
+| `StatusNovoId` | Status Identifier | Não | FK → Status |
+| `UsuarioId` | User Identifier | Não | FK → User (usuário do ODC) |
+| `DataHora` | Date Time | Não | — |
+| `Observacao` | Text (500) | Não | — |
+
+**Entidades estáticas (estrutura)**
+
+| Entidade | Atributos (tipo) |
+|---|---|
+| `Idioma` | Id (Integer, PK) · Codigo (Text 100) · Nome (Text 100) |
+| `Categoria` | Id (Integer, PK) · Nome (Text 100) |
+| `Prioridade` | Id (Integer, PK) · Nome (Text 100) · HorasSLA (Integer) · Ordem (Integer) |
+| `Status` | Id (Integer, PK) · Nome (Text 100) · Ordem (Integer) |
+| `Canal` | Id (Integer, PK) · Nome (Text 100) |
+
+Nas entidades estáticas, todos os atributos são obrigatórios.
 
 ## 7. Regras de negócio e workflow
 
@@ -364,6 +455,18 @@ As imagens finais para computador e celular estão na seção [Prints](#10-print
 - O envio de respostas registra a interação no aplicativo; a entrega automática por LINE/WhatsApp não está implementada.
 - A priorização ainda pode ser refinada para solicitações com prazo explícito anterior ao SLA calculado.
 - Próximos passos: integração real com LINE/WhatsApp, notificações por e-mail no estouro do SLA, perfis de acesso, relatórios exportáveis e revisão das traduções por falantes nativos.
+
+## 14. Conclusão
+
+O desenvolvimento do SK Flow demonstrou a aplicabilidade das plataformas low-code na construção de soluções empresariais que integram inteligência artificial, persistência de dados, regras de negócio e interfaces responsivas.
+
+A utilização do OutSystems Developer Cloud possibilitou a implementação de uma arquitetura modular, com separação de responsabilidades, reutilização de componentes e centralização das regras de negócio.
+
+Durante o desenvolvimento, os desafios relacionados à codificação de caracteres Unicode, à integração com inteligência artificial, ao cálculo de prazos e à responsividade contribuíram para o aprofundamento dos conhecimentos técnicos e para o desenvolvimento da capacidade de investigação e resolução de problemas.
+
+O projeto também evidenciou a importância da supervisão humana no uso da inteligência artificial, especialmente em processos que envolvem comunicação multilíngue e decisões relacionadas ao atendimento de trabalhadores.
+
+Embora existam oportunidades de evolução, o SK Flow atende à proposta acadêmica de demonstrar uma solução low-code aplicada a um problema empresarial concreto, apresentando potencial de expansão e utilização profissional após as adequações e validações necessárias.
 
 ---
 
