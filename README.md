@@ -26,8 +26,9 @@
 8. [Tecnologias](#8-tecnologias)
 9. [Acessibilidade, dados e uso responsável](#9-acessibilidade-dados-e-uso-responsável)
 10. [Prints](#10-prints)
-11. [Como testar](#11-como-testar)
-12. [Limitações e próximos passos](#12-limitações-e-próximos-passos)
+11. [Evolução do desenvolvimento](#11-evolução-do-desenvolvimento)
+12. [Como testar](#12-como-testar)
+13. [Limitações e próximos passos](#13-limitações-e-próximos-passos)
 
 ---
 
@@ -249,7 +250,55 @@ stateDiagram-v2
 |---|---|---|
 | <img src="docs/prints/mobile-07-nova-ocorrencia.png" width="220"> | <img src="docs/prints/mobile-08-detalhe.png" width="220"> | <img src="docs/prints/mobile-09-resposta-sugerida.png" width="220"> |
 
-## 11. Como testar
+## 11. Evolução do desenvolvimento
+
+O SK Flow foi desenvolvido de forma iterativa, com testes e ajustes técnicos e visuais. As capturas abaixo registram etapas de 25 e 26 de novembro de 2026, comparadas com a versão final.
+
+### 11.1. Integração com IA e processamento multilíngue
+
+A integração REST inicial apresentou problemas de codificação de caracteres não latinos. A migração para o conector nativo AI models do ODC resolveu o problema relatado e permitiu manter a chave de API fora do código. Os prompts também foram refinados para produzir resumos em terceira pessoa e respostas na perspectiva da SK Link.
+
+| Entrada em birmanês | Resultado da análise |
+|---|---|
+| ![Mensagem de teste](docs/prints/pc-05-nova-ocorrencia.png) | ![Tradução e classificação](docs/prints/pc-06-detalhe-ia.png) |
+
+As imagens mostram o resultado funcional após os ajustes, não a falha original de codificação. A qualidade linguística ainda requer validação por falantes nativos antes do uso real.
+
+### 11.2. Dashboard e identidade visual
+
+Os gráficos inicialmente azuis foram padronizados com o vermelho da identidade visual da SK Link, mantendo o destaque para ocorrências atrasadas.
+
+| Versão inicial | Versão final |
+|---|---|
+| ![Dashboard inicial](docs/evolucao/dashboard-inicial.png) | ![Dashboard final](docs/prints/pc-01-dashboard.png) |
+
+### 11.3. Filtros e visualização em Kanban
+
+Os filtros inicialmente exibiam o valor interno `0` em vez de um rótulo compreensível. A interface passou a apresentar Todos/Todas. O Kanban evoluiu com bandeiras, melhor alinhamento dos cartões e alternativa de movimentação pelo botão “Mover para…”.
+
+| Filtros iniciais | Filtros corrigidos |
+|---|---|
+| ![Filtros iniciais](docs/evolucao/filtros-iniciais.png) | ![Filtros finais](docs/prints/pc-03-ocorrencias-lista.png) |
+
+| Kanban inicial | Kanban intermediário | Kanban final |
+|---|---|---|
+| ![Kanban inicial](docs/evolucao/kanban-inicial.png) | ![Kanban intermediário](docs/evolucao/kanban-intermediario.png) | ![Kanban final](docs/prints/pc-04-ocorrencias-kanban.png) |
+
+### 11.4. Autenticação
+
+A tela padrão do OutSystems evoluiu para uma interface personalizada em português, com identidade visual do SK Flow e opção separada de acesso administrativo pelo OutSystems.
+
+| Login padrão | Versão intermediária | Versão final |
+|---|---|---|
+| ![Login padrão](docs/evolucao/login-padrao.png) | ![Login intermediário](docs/evolucao/login-intermediario.png) | ![Login final](docs/prints/pc-00-login.png) |
+
+### 11.5. Aprendizado e limitações identificadas
+
+O teste de uma solicitação de acompanhamento médico para a manhã seguinte mostrou que uma prioridade Alta (24 horas úteis) pode resultar em prazo posterior à necessidade informada. O cálculo segue a regra atual, mas evidencia a necessidade de considerar também a urgência temporal explícita da mensagem. Esse refinamento permanece como melhoria futura, com revisão humana da prioridade.
+
+As iterações demonstram a importância de testar integrações, regras de negócio e usabilidade, além de construir as telas. As imagens finais para computador e celular permanecem na seção [Prints](#10-prints).
+
+## 12. Como testar
 
 **Aplicação:** https://personal-eznjxwlm-dev.outsystems.app/SKFlow
 
@@ -278,12 +327,14 @@ stateDiagram-v2
 7. **Kanban** — em **Ocorrências → Kanban**, arraste um cartão para outra coluna (no PC) ou use **"Mover para…"** (no celular ou teclado). Veja o registro no histórico do Detalhe.
 8. **Celular** — abra o mesmo link no celular para ver a versão responsiva.
 
-## 12. Limitações e próximos passos
+## 13. Limitações e próximos passos
 
 - **Feriados** não são considerados no cálculo de horas úteis (apenas noites e fins de semana).
 - **Papéis** ainda não distinguem atendente e gestor.
 - O "tempo médio de resolução" usa horas corridas; pode passar a usar horas úteis.
 - Os prazos dos dados de demonstração usam horas corridas, apenas para ilustrar o indicador Atrasada.
+- O envio de respostas registra a interação no aplicativo; a entrega automática por LINE/WhatsApp não está implementada.
+- A priorização ainda pode ser refinada para solicitações com prazo explícito anterior ao SLA calculado.
 - Próximos passos: integração real com LINE/WhatsApp, notificações por e-mail no estouro do SLA, perfis de acesso, relatórios exportáveis e revisão das traduções por falantes nativos.
 
 ---
